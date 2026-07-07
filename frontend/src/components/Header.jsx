@@ -32,7 +32,11 @@ export default function Header({ settings }) {
     >
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
         <Link to="/" data-testid="brand-link" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center text-white font-heading font-bold">B</div>
+          <img
+            src={settings?.logo || "/assets/brevitus-logo.jpeg"}
+            alt="Brevitus Technology"
+            className="h-11 w-11 rounded-xl object-cover bg-black"
+          />
           <div className="leading-tight">
             <div className="font-heading font-bold text-lg text-slate-900">Brevitus</div>
             <div className="text-[10px] uppercase tracking-widest text-slate-500 -mt-0.5">Technology</div>

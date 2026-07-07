@@ -8,7 +8,11 @@ export default function Footer({ settings }) {
       <div className="mx-auto max-w-7xl px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center text-white font-heading font-bold">B</div>
+            <img
+              src={s.logo || "/assets/brevitus-logo.jpeg"}
+              alt="Brevitus Technology"
+              className="h-11 w-11 rounded-xl object-cover bg-black"
+            />
             <span className="font-heading text-xl font-bold text-white">Brevitus Technology</span>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed">

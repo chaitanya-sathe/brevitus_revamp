@@ -31,7 +31,11 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className={`fixed lg:static z-40 inset-y-0 left-0 w-[250px] bg-[#0b0b0d] border-r border-[#1f1f22] flex flex-col transition-transform ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         <div className="px-5 py-5 flex items-center gap-2 border-b border-[#1f1f22]">
-          <div className="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center text-white font-heading font-bold">B</div>
+          <img
+            src="/assets/brevitus-logo.jpeg"
+            alt="Brevitus"
+            className="h-9 w-9 rounded-lg object-cover bg-black"
+          />
           <div>
             <div className="font-heading font-bold text-sm">Brevitus</div>
             <div className="text-[10px] uppercase tracking-widest text-zinc-500">Admin</div>
