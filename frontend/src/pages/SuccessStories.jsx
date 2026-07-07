@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { api, safeList } from "@/lib/api";
 import SEO from "@/components/SEO";
 import { Star, Quotes } from "@phosphor-icons/react";
 
 export default function SuccessStories() {
   const [testimonials, setTestimonials] = useState([]);
-  useEffect(() => { api.get("/public/testimonials").then((r) => setTestimonials(r.data)); }, []);
+  useEffect(() => { api.get("/public/testimonials").then(safeList(setTestimonials)).catch(() => {}); }, []);
+  const list = Array.isArray(testimonials) ? testimonials : [];
   return (
     <div>
       <SEO title="Success Stories — Brevitus Technology" description="Real learners, real placements, real hikes." />
@@ -15,7 +16,7 @@ export default function SuccessStories() {
       </section>
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6" data-testid="stories-grid">
-          {testimonials.map((t) => (
+          {list.map((t) => (
             <div key={t.id} className="p-8 rounded-2xl bg-white border border-slate-200" data-testid={`story-${t.id}`}>
               <Quotes size={28} weight="fill" className="text-purple-500" />
               <p className="mt-3 font-heading text-2xl text-slate-900 leading-snug">"{t.quote}"</p>

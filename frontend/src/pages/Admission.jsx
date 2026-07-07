@@ -27,11 +27,12 @@ export default function Admission() {
 
   useEffect(() => {
     api.get("/public/courses").then((r) => {
-      setCourses(r.data || []);
-      if (!form.course_interested && r.data?.length) {
-        setForm((f) => ({ ...f, course_interested: r.data[0].title }));
+      const list = Array.isArray(r?.data) ? r.data : [];
+      setCourses(list);
+      if (!form.course_interested && list.length) {
+        setForm((f) => ({ ...f, course_interested: list[0].title }));
       }
-    });
+    }).catch(() => {});
     // eslint-disable-next-line
   }, []);
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { api, safeList } from "@/lib/api";
 import SEO from "@/components/SEO";
 import { LinkedinLogo } from "@phosphor-icons/react";
 
 export default function Team() {
   const [team, setTeam] = useState([]);
-  useEffect(() => { api.get("/public/team").then((r) => setTeam(r.data)); }, []);
+  useEffect(() => { api.get("/public/team").then(safeList(setTeam)).catch(() => {}); }, []);
+  const list = Array.isArray(team) ? team : [];
   return (
     <div>
       <SEO title="Team — Brevitus Technology" description="Meet the practitioners behind Brevitus Technology." />
@@ -13,7 +14,7 @@ export default function Team() {
         <div className="text-xs uppercase tracking-widest font-bold text-purple-700">Our people</div>
         <h1 className="font-heading text-5xl md:text-6xl font-bold text-slate-900 mt-3">Practitioners, not lecturers.</h1>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="team-grid">
-          {team.map((m) => (
+          {list.map((m) => (
             <div key={m.id} className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-purple-400 transition" data-testid={`team-${m.id}`}>
               <div className="w-16 h-16 rounded-2xl bg-brand-gradient flex items-center justify-center text-white font-heading text-xl font-bold overflow-hidden">
                 {m.photo ? <img src={m.photo} alt={m.name} className="w-full h-full object-cover" /> : m.name?.[0]}

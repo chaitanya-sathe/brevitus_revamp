@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "@/lib/api";
+import { api, safeList } from "@/lib/api";
 import SEO from "@/components/SEO";
 import {
   ArrowRight, Target, Handshake, Briefcase, Rocket, Star, Sparkle, GraduationCap,
@@ -15,13 +15,16 @@ export default function Home() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    api.get("/public/homepage").then((r) => setHomepage(r.data));
-    api.get("/public/courses").then((r) => setCourses(r.data));
-    api.get("/public/testimonials").then((r) => setTestimonials(r.data));
-    api.get("/public/projects").then((r) => setProjects(r.data));
+    api.get("/public/homepage").then((r) => setHomepage(r.data && typeof r.data === "object" && !Array.isArray(r.data) ? r.data : null)).catch(() => {});
+    api.get("/public/courses").then(safeList(setCourses)).catch(() => {});
+    api.get("/public/testimonials").then(safeList(setTestimonials)).catch(() => {});
+    api.get("/public/projects").then(safeList(setProjects)).catch(() => {});
   }, []);
 
   const h = homepage || {};
+  const safeCourses = Array.isArray(courses) ? courses : [];
+  const safeTestimonials = Array.isArray(testimonials) ? testimonials : [];
+  const safeProjects = Array.isArray(projects) ? projects : [];
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -144,7 +147,7 @@ export default function Home() {
           <Link to="/courses" data-testid="see-all-courses" className="hidden md:inline-flex items-center gap-1 text-sm font-semibold text-purple-700 hover:text-purple-900">View all <ArrowRight size={16} /></Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.slice(0, 6).map((c) => (
+          {safeCourses.slice(0, 6).map((c) => (
             <CourseCard key={c.id} course={c} />
           ))}
         </div>
@@ -182,14 +185,14 @@ export default function Home() {
       )}
 
       {/* TESTIMONIALS */}
-      {testimonials.length > 0 && (
+      {safeTestimonials.length > 0 && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="max-w-2xl mb-10">
             <div className="text-xs uppercase tracking-widest font-bold text-purple-700">Learner stories</div>
             <h2 className="font-heading text-4xl md:text-5xl font-bold text-slate-900 mt-3">{h.testimonial_heading || "What our learners say"}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.slice(0, 6).map((t, i) => (
+            {safeTestimonials.slice(0, 6).map((t, i) => (
               <div key={t.id} className={`p-6 rounded-2xl bg-white border border-slate-200 ${i === 0 ? "lg:col-span-2 lg:row-span-1" : ""}`} data-testid={`testimonial-${t.id}`}>
                 <div className="flex text-amber-400 mb-3">
                   {Array.from({ length: t.rating || 5 }).map((_, k) => <Star key={k} size={16} weight="fill" />)}

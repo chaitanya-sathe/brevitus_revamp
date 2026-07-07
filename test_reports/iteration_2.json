@@ -1,0 +1,47 @@
+{
+  "summary": "Frontend regression testing for the 'a.slice(...).map is not a function' blank-page bug fix. Playwright intercepted /api/public/** with text/html to reproduce the failure mode. Found & fixed one critical regression in Blogs.jsx (missing `list` guard caused ReferenceError → completely blank /blog page). After the fix, all listed pages render safely under both healthy and malformed API responses, admission form still gates submission with a toast, and admin/Brevitus@2026 still logs into the dashboard.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Blogs (/blog)",
+        "issue": "[FIXED by test agent] Blogs.jsx used `list.map(...)` and `list.length` in JSX, but the variable `list` was never declared — the file was missed when the defensive `const list = Array.isArray(items) ? items : []` pattern was added to Team/Events/Internships/SuccessStories. Result: ReferenceError: `list is not defined` on every visit to /blog, producing a completely blank page identical to the reported production bug. Also used `.then((r) => setItems(r.data))` without safeList, so an HTML response would still make items a string. Fixed by matching the pattern of the sibling pages: added `safeList` import, wrapped setter with `safeList(setItems)`, added `.catch(() => {})`, and declared `const list = Array.isArray(items) ? items : []`.",
+        "selector": "route /blog, data-testid=\"blog-grid\"",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "/founder",
+        "issues": ["When /api/public/team returns a non-array (bad backend URL), Founder page is stuck on the 'Loading…' placeholder forever with no error surfaced. Header/footer still render outside the component, so this is NOT a crash — but users get no feedback. Consider showing a fallback (e.g., 'Founder profile temporarily unavailable') when the team fetch resolves to an empty list."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/tests/frontend_regression.py",
+    "/app/backend/tests/backend_test.py"
+  ],
+  "action_items": [
+    "Confirm the Blogs.jsx fix (already applied by test agent — 3-line change matching the other pages). No further work required unless main agent prefers a different pattern.",
+    "OPTIONAL: Add a graceful fallback on /founder when the team list is empty so users see something better than 'Loading…' forever.",
+    "OPTIONAL: Extract `const list = Array.isArray(items) ? items : []` and the safeList setter into a tiny reusable hook (e.g., useSafeList('/public/…')) to prevent this same regression from re-occurring on any future list-consuming page."
+  ],
+  "critical_code_review_comments": [
+    "Blogs.jsx was the only sibling page to miss the defensive guard — this is a copy-paste hazard. A `useSafeList` hook would eliminate the class of bug in one place.",
+    "Home.jsx line 157 uses raw `projects.length > 0` (not `safeProjects.length`); this is currently safe because the setter is wrapped in safeList (so state is always an array), but the inconsistency invites the same bug the next time someone edits the file.",
+    "Founder.jsx has correct Array.isArray guard, but the 'Loading…' fallback becomes a permanent state when the API is misconfigured — worth improving.",
+    "All list-consuming pages now share the same defensive shape; consider a shared component/hook to enforce it."
+  ],
+  "updated_files": [
+    "/app/frontend/src/pages/Blogs.jsx (added safeList import, wrapped setter, .catch fallback, and `const list = Array.isArray(items) ? items : []` guard)",
+    "/app/tests/frontend_regression.py (documentation stub for the executed Playwright regression suite)"
+  ],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "100% after 1 fix (9/9 pages render without map/slice/ReferenceError under HTML intercept; healthy home page renders hero+6 courses+4 testimonials+4 features+FAQ; admission form blocks empty submit with toast; admin login lands on /admin/dashboard)"},
+  "test_credentials": "admin / Brevitus@2026 (verified working, logs into /admin/dashboard).",
+  "seed_data_creation": "None. No writes performed.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "The 'blank page / map is not a function' bug is fully resolved for all listed pages. Blogs.jsx required the same fix as its siblings (add `const list = Array.isArray(items) ? items : []` + safeList) — the test agent applied it. Regression method: `await page.route('**/api/public/**', route => route.fulfill(status=200, contentType='text/html', body='<html>irrelevant</html>'))` then visit each page and confirm h1 is visible, body_len > 100, and no pageerror. Admin login uses generic input selectors (input[0] = username, input[type=password] = password) + data-testid=\"login-submit\".",
+  "rca of the issue": "Root cause of the original production bug: axios responses were spread through setter functions without validating that r.data was actually an array. When the Vercel frontend called the Hugging Face Space's URL, HF returned the Space's landing HTML with a 200; the code then did `courses.slice(0,6).map(...)` — strings have `.slice()` (returns a substring) but not `.map()`, so React crashed and unmounted the tree, yielding an empty <body>. The chosen fix (a `safeList` helper plus `Array.isArray` guards at each render site) is correct, but was applied inconsistently: Blogs.jsx was updated to REFERENCE a `list` variable that was never declared, immediately re-creating the same blank-page symptom (this time with `ReferenceError: list is not defined` instead of `.map is not a function`). Reproduction: navigate to `/blog` in the preview environment — completely blank body with body.innerText.length=18 and page error `list is not defined`. Mitigation: apply the same 3-line pattern used in Team.jsx/Events.jsx/Internships.jsx/SuccessStories.jsx — done by the test agent. Verified: /blog now renders header, hero ('Insights, stories & how-tos.'), one blog card ('Why 2026 is the Year to Learn Agentic AI'), and full footer with zero console errors."
+}

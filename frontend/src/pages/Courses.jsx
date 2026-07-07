@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "@/lib/api";
+import { api, safeList } from "@/lib/api";
 import SEO from "@/components/SEO";
 import { CourseCard } from "./Home";
 
 export default function Courses() {
   const [items, setItems] = useState([]);
   const [mode, setMode] = useState("All");
-  useEffect(() => { api.get("/public/courses").then((r) => setItems(r.data)); }, []);
-  const filtered = mode === "All" ? items : items.filter((c) => c.mode === mode);
+  useEffect(() => { api.get("/public/courses").then(safeList(setItems)).catch(() => {}); }, []);
+  const list = Array.isArray(items) ? items : [];
+  const filtered = mode === "All" ? list : list.filter((c) => c.mode === mode);
   const modes = ["All", "Online", "Offline", "Hybrid"];
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": items.map((c, i) => ({
+    "itemListElement": list.map((c, i) => ({
       "@type": "ListItem", "position": i + 1, "url": `${typeof window !== "undefined" ? window.location.origin : ""}/courses/${c.slug}`, "name": c.title,
     })),
   };

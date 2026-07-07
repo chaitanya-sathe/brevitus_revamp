@@ -35,3 +35,11 @@ export function formatError(detail) {
   if (detail && typeof detail.msg === "string") return detail.msg;
   return String(detail);
 }
+
+/**
+ * Safe list setter: only calls setter if the response body is an array.
+ * Prevents render-time crashes when the backend URL is wrong and returns HTML.
+ */
+export function safeList(setter) {
+  return (r) => setter(Array.isArray(r?.data) ? r.data : []);
+}

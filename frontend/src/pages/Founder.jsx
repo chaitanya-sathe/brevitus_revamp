@@ -6,9 +6,9 @@ export default function Founder() {
   const [founder, setFounder] = useState(null);
   useEffect(() => {
     api.get("/public/team").then((r) => {
-      const list = r.data || [];
+      const list = Array.isArray(r?.data) ? r.data : [];
       setFounder(list.find((m) => m.is_founder) || list[0] || null);
-    });
+    }).catch(() => {});
   }, []);
   if (!founder) return <div className="mx-auto max-w-4xl px-6 py-24 text-center text-slate-500">Loading…</div>;
   return (

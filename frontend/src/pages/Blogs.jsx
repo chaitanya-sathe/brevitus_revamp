@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "@/lib/api";
+import { api, safeList } from "@/lib/api";
 import SEO from "@/components/SEO";
 import { ArrowRight } from "@phosphor-icons/react";
 
 export default function Blogs() {
   const [items, setItems] = useState([]);
-  useEffect(() => { api.get("/public/blogs").then((r) => setItems(r.data)); }, []);
+  useEffect(() => { api.get("/public/blogs").then(safeList(setItems)).catch(() => {}); }, []);
+  const list = Array.isArray(items) ? items : [];
   return (
     <div>
       <SEO title="Blog — Brevitus Technology" description="Insights on AI, Data Science, Analytics, and modern careers." />
@@ -16,7 +17,7 @@ export default function Blogs() {
       </section>
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="blog-grid">
-          {items.map((b) => (
+          {list.map((b) => (
             <Link key={b.id} to={`/blog/${b.slug}`} data-testid={`blog-card-${b.slug}`} className="group block rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition">
               <div className="aspect-[16/9] bg-gradient-to-br from-purple-500 to-blue-800 flex items-center justify-center text-white font-heading text-xl overflow-hidden">
                 {b.cover_image ? <img src={b.cover_image} alt={b.cover_alt || b.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /> : b.category}
@@ -29,7 +30,7 @@ export default function Blogs() {
               </div>
             </Link>
           ))}
-          {items.length === 0 && <div className="col-span-3 text-slate-500 text-center py-12">No blog posts yet.</div>}
+          {list.length === 0 && <div className="col-span-3 text-slate-500 text-center py-12">No blog posts yet.</div>}
         </div>
       </section>
     </div>
