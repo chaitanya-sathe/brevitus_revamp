@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 
@@ -45,7 +45,9 @@ export function Select({ value, onChange, options, testid }) {
       className="w-full px-3 py-2 bg-[#0e0e11] border border-[#27272a] rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-purple-500"
     >
       {options.map((o) => (
-        <option key={typeof o === "string" ? o : o.value} value={typeof o === "string" ? o : o.value}>{typeof o === "string" ? o : o.label}</option>
+        <option key={typeof o === "string" ? o : o.value} value={typeof o === "string" ? o : o.value}>
+          {typeof o === "string" ? o : o.label}
+        </option>
       ))}
     </select>
   );
@@ -145,7 +147,8 @@ export function Card({ children, className = "" }) {
 export function useAdminList(endpoint) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  async function load() {
+
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get(endpoint);
@@ -154,8 +157,12 @@ export function useAdminList(endpoint) {
       toast.error("Failed to load");
     }
     setLoading(false);
-  }
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [endpoint]);
+  }, [endpoint]); // ✅ stable function tied to endpoint
+
+  useEffect(() => {
+    load();
+  }, [load]); // ✅ ESLint satisfied
+
   return { items, loading, reload: load, setItems };
 }
 
