@@ -1,0 +1,101 @@
+{
+  "project_name": "Brevitus Technology",
+  "domain": "EdTech & Technology Courses",
+  "theme_archetype": {
+    "public_site": "Archetype 4 (Swiss & High-Contrast) - Light Theme with EdTech Soft Dark Mode",
+    "admin_panel": "Archetype 4 (Swiss & High-Contrast) - Minimal Dark Theme"
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Cabinet Grotesk",
+      "import_url": "https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&display=swap",
+      "classes": "font-['Cabinet_Grotesk',_sans-serif] tracking-tight leading-tight",
+      "sizing": "H1: text-5xl md:text-6xl, H2: text-4xl md:text-5xl, H3: text-2xl md:text-3xl"
+    },
+    "body": {
+      "font_family": "Manrope",
+      "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap",
+      "classes": "font-['Manrope',_sans-serif] leading-relaxed text-base"
+    },
+    "labels": {
+      "classes": "uppercase text-xs tracking-widest font-bold"
+    }
+  },
+  "color_palette": {
+    "public_site": {
+      "background": "bg-slate-50",
+      "surface": "bg-white",
+      "text_primary": "text-slate-900",
+      "text_secondary": "text-slate-600",
+      "brand_primary": "bg-blue-900",
+      "brand_accent": "bg-purple-600",
+      "gradient_requested": "bg-gradient-to-r from-blue-900 via-blue-800 to-purple-600",
+      "gradient_usage": "Use selectively as a text-clip mask for key headlines or a subtle 10% opacity wash behind the hero. DO NOT use as a flat full-screen background."
+    },
+    "admin_panel": {
+      "background": "bg-[#09090b]",
+      "surface": "bg-[#18181b]",
+      "surface_hover": "hover:bg-[#27272a]",
+      "border": "border-[#27272a]",
+      "text_primary": "text-zinc-100",
+      "text_secondary": "text-zinc-400",
+      "primary_action": "bg-purple-600 hover:bg-purple-500 text-white"
+    }
+  },
+  "layout_spacing": {
+    "spacing_scale": "p-8, p-12, p-16 (Generous spacing for public sections)",
+    "public_grid": "Mode A (Tetris Grid) for marketing sections. Use asymmetry and wide gaps (gap-8).",
+    "admin_grid": "Mode B (Control Room Grid). Strict density, tight gaps (gap-4). Every pixel utilized.",
+    "borders_and_radius": "Public cards: rounded-2xl. Admin: rounded-lg. Soft shadows for public, sharp 1px borders for admin."
+  },
+  "component_strategies": {
+    "public_hybrid_rule": "Use pure HTML + Tailwind for structural layouts (Hero, Sections). Do NOT use Shadcn Card components for marketing. ONLY use Shadcn for interactive logic (Forms, Modals, Selects).",
+    "hero_section": "Dynamic overlapping layout. Headline in Cabinet Grotesk. If using an image, overlay must be max bg-black/40. If using abstract gradient background, keep it clean with large floating CTA.",
+    "course_cards": "Custom HTML/Tailwind. Max-h-48 image thumbnail. Content padded with p-6. Display rounded-full badges for duration, price, mode. Prominent Apply Now button matching brand gradient.",
+    "testimonial_layout": "Bento Grid format. Quotes in text-xl bold. Subtle user details at bottom. Avoid center-everything disease.",
+    "sticky_cta": "Fixed bottom right (z-50). Crystal Glassmorphism: backdrop-blur-xl bg-white/70. One Green button (WhatsApp), one Brand Gradient button (Book Free Demo).",
+    "admin_sidebar": "250px fixed width, minimal dark theme. Active states use bg-white/10. Hide on mobile behind a hamburger menu."
+  },
+  "ui_micro_themes": {
+    "glassmorphism": "Used for sticky public nav and sticky CTA. backdrop-blur-xl bg-white/70 (light), border-white/20.",
+    "grid_borders": "Used in Admin tables and dashboard stat cards. Expose the skeleton, 1px border-border/40."
+  },
+  "icons_library": {
+    "choice": "@phosphor-icons/react",
+    "installation": "yarn add @phosphor-icons/react"
+  },
+  "testing_requirements": {
+    "attributes": "All interactive elements MUST include data-testid attributes (e.g., data-testid='apply-now-btn')."
+  },
+  "media_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1762279389045-110301edeecc",
+      "description": "Abstract purple lines for tech background"
+    },
+    "course_ai": {
+      "url": "https://images.pexels.com/photos/17483873/pexels-photo-17483873.png",
+      "description": "Abstract AI neural network 3D render"
+    },
+    "students_collaboration": {
+      "url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGNvbGxhYm9yYXRpbmclMjBsYXB0b3BzfGVufDB8fHx8MTc4MjI3NDkxMHww&ixlib=rb-4.1.0&q=85",
+      "description": "Group of students collaborating on a laptop"
+    },
+    "classroom_learning": {
+      "url": "https://images.pexels.com/photos/9159042/pexels-photo-9159042.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Students learning in a classroom with laptops"
+    },
+    "office_environment": {
+      "url": "https://images.pexels.com/photos/260689/pexels-photo-260689.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Modern glass office/meeting room"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Inject the font-families via Google Fonts/Fontshare in the index.html or global CSS.",
+    "Do not use Shadcn for the public marketing layout except for complex form interactions.",
+    "Implement the sticky CTA fixed at the bottom right corner of the viewport on all public pages.",
+    "Admin panel must be strictly dark mode by default using the provided dark color palette.",
+    "Build the Leads table in the admin panel using dense layout principles.",
+    "Ensure all data-testids are added as per rules.",
+    "All components must be .js files, NOT .tsx files."
+  ]
+}
