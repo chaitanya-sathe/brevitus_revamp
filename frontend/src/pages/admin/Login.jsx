@@ -44,7 +44,7 @@ export default function AdminLogin() {
               data-testid="username-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#0e0e11] border border-[#27272a] rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-purple-500"
+              className="w-full px-3 py-2.5 bg-[#18181b] border border-[#3f3f46] rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40"
             />
           </div>
           <div>
@@ -54,7 +54,7 @@ export default function AdminLogin() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#0e0e11] border border-[#27272a] rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-purple-500"
+              className="w-full px-3 py-2.5 bg-[#18181b] border border-[#3f3f46] rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40"
             />
           </div>
           <button type="submit" disabled={loading} data-testid="login-submit" className="w-full py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm disabled:opacity-60">
