@@ -1,0 +1,45 @@
+{
+  "summary": "Full e2e test of Brevitus Technology (backend + frontend). All 33 backend pytest cases pass after 2 fixes; every listed frontend flow (public site, admission, admin CRUD, homepage/settings, logout) works. Two backend bugs found & fixed by test agent.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/admin/{courses,blogs,testimonials,team,projects,events,internships}", "issue": "[FIXED] _create returned the dict after insert_one(), which motor mutates in-place with ObjectId, causing FastAPI JSON encoder to raise 500. Fixed by popping _id before returning."},
+      {"endpoint": "POST /api/admin/courses & /api/admin/blogs", "issue": "[FIXED] Course.slug and Blog.slug were declared as required in models.py, but the handler auto-generates slug from title only after Pydantic validation, so create without explicit slug raised 422 -> 500. Made slug default to '' in models.py."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin Login (/admin/login)", "issues": ["Password input has no visible border/background in dark theme — cursor is invisible in the empty field. Users may not realise the field is focusable. Consider adding a subtle border or lighter background."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Consider adding data-testid=\"login-username\" / \"login-password\" on the admin login inputs for easier automation (currently only login-submit is guaranteed).",
+    "Improve visual contrast on admin login password input.",
+    "Optional: seed_admin could also seed some real (non-TEST_) leads/blogs for demo purposes."
+  ],
+  "critical_code_review_comments": [
+    "server.py _create previously returned the raw dict mutated by insert_one() – a common Motor gotcha. Now fixed via doc.pop('_id').",
+    "models.py: Course.slug and Blog.slug should be optional (default '') because the server auto-generates them from title. This is what the spec 'auto-slug generation from title works' expects.",
+    "server.py leads listing (/api/admin/leads) returns full docs; consider pagination for scale.",
+    "auth.py: single admin, JWT stored in localStorage — acceptable for internal admin, but for production consider httpOnly cookies and rotating secrets.",
+    "server.py: CORS_ORIGINS defaults to '*' with allow_credentials=True — browsers will reject; if credentials are actually needed set explicit origins."
+  ],
+  "updated_files": [
+    "/app/backend/server.py (pop _id from CRUD create response)",
+    "/app/backend/models.py (Course.slug and Blog.slug now default to \"\")",
+    "/app/backend/tests/backend_test.py (new pytest suite, 33 tests)"
+  ],
+  "success_rate": {"backend": "100% (33/33)", "frontend": "~97% (every requested flow verified end-to-end)"},
+  "test_credentials": "admin / Brevitus@2026 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None persistent — all TEST_ prefixed data created during runs was deleted at end.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest suite lives at /app/backend/tests/backend_test.py and can be re-run: `pytest backend/tests/backend_test.py -v`. All 33 tests pass. Admin login is admin/Brevitus@2026. The public URL is REACT_APP_BACKEND_URL. Data-testids of note: hero-heading (input) on HomepageAdmin (not hero-heading-input). login form uses generic input selectors — plain input[name] or input[type=password].",
+  "rca of the issue": "Two backend 500s fixed: (1) Motor's insert_one() mutates the dict argument to include the generated _id (ObjectId), which FastAPI's default encoder cannot serialize -> 500 on every _crud POST. Root cause: not popping _id before returning. Repro: POST /api/admin/testimonials with valid payload. Mitigation: doc.pop('_id', None) after insert. (2) Course.slug & Blog.slug were `str` (required) but the create handler generates slug only after Pydantic validation, so any POST without explicit slug hit a Pydantic ValidationError. Repro: POST /api/admin/courses body={\"title\": \"X\"}. Mitigation: default slug to '' in the models. Both fixed and verified via pytest."
+}
