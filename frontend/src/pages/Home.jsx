@@ -79,9 +79,12 @@ export default function Home() {
 
             <div className="lg:col-span-5 relative">
               <div className="grid grid-cols-2 gap-4">
-                <div className="floaty aspect-square rounded-2xl bg-gradient-to-br from-purple-500 to-blue-700 p-6 flex flex-col justify-between text-white shadow-xl">
-                  <GraduationCap size={32} weight="duotone" />
-                  <div>
+                <div className="floaty aspect-square rounded-2xl bg-gradient-to-br from-purple-500 to-blue-700 p-6 flex flex-col justify-between text-white shadow-xl relative overflow-hidden">
+                  {h.hero_image && (
+                    <img src={h.hero_image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity" />
+                  )}
+                  <GraduationCap size={32} weight="duotone" className="relative" />
+                  <div className="relative">
                     <div className="text-xs uppercase tracking-widest opacity-80">Featured</div>
                     <div className="font-heading text-xl font-bold mt-1">Agentic AI</div>
                     <div className="text-sm opacity-90">5-month program</div>
@@ -156,14 +159,21 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {projects.slice(0, 4).map((p) => (
-              <div key={p.id} className="p-6 rounded-2xl bg-slate-900 text-white shadow-lg hover:shadow-purple-500/20 hover:-translate-y-1 transition" data-testid={`project-${p.id}`}>
-                <div className="text-xs uppercase tracking-widest text-purple-300 font-bold">{p.category}</div>
-                <div className="font-heading text-lg font-bold mt-3">{p.title}</div>
-                <p className="text-sm text-slate-400 mt-2">{p.description}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {(p.tech_tags || []).map((t) => (
-                    <span key={t} className="text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-white/10">{t}</span>
-                  ))}
+              <div key={p.id} className="group rounded-2xl bg-slate-900 text-white shadow-lg hover:shadow-purple-500/20 hover:-translate-y-1 transition overflow-hidden" data-testid={`project-${p.id}`}>
+                {p.thumbnail && (
+                  <div className="aspect-[16/10] overflow-hidden">
+                    <img src={p.thumbnail} alt={p.thumbnail_alt || p.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  </div>
+                )}
+                <div className="p-6">
+                  <div className="text-xs uppercase tracking-widest text-purple-300 font-bold">{p.category}</div>
+                  <div className="font-heading text-lg font-bold mt-2">{p.title}</div>
+                  <p className="text-sm text-slate-400 mt-2 line-clamp-2">{p.description}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {(p.tech_tags || []).map((t) => (
+                      <span key={t} className="text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-white/10">{t}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -186,7 +196,9 @@ export default function Home() {
                 </div>
                 <p className={`${i === 0 ? "text-xl" : "text-base"} font-heading font-medium text-slate-900 leading-snug`}>“{t.quote}”</p>
                 <div className="mt-5 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center text-white font-heading font-bold">{t.name?.[0]}</div>
+                  <div className="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center text-white font-heading font-bold overflow-hidden">
+                    {t.photo ? <img src={t.photo} alt={t.name} className="w-full h-full object-cover" /> : t.name?.[0]}
+                  </div>
                   <div>
                     <div className="text-sm font-semibold text-slate-900">{t.name}</div>
                     <div className="text-xs text-slate-500">{t.role}{t.company ? ` · ${t.company}` : ""}</div>

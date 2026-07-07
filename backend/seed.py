@@ -240,6 +240,40 @@ async def seed_all(db):
     now = datetime.now(timezone.utc).isoformat()
     import uuid
 
+    # image URL builder (Unsplash CDN)
+    def img(pid, w=800, h=500):
+        return f"https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&h={h}&q=70"
+
+    COURSE_IMGS = {
+        "Data Science": img("photo-1551288049-bebda4e38f71"),
+        "Artificial Intelligence & Machine Learning": img("photo-1677442136019-21780ecad995"),
+        "Generative & Agentic AI": img("photo-1620712943543-bcc4688e7485"),
+        "Data Analytics": img("photo-1460925895917-afdab827c52f"),
+        "Python Programming": img("photo-1526379095098-d400fd0bf935"),
+        "SQL for Data": img("photo-1544383835-bda2bc66a55d"),
+        "Power BI": img("photo-1543286386-713bdd548da4"),
+        "Tableau": img("photo-1518186285589-2f7649de83e0"),
+    }
+    PROJECT_IMGS = {
+        "AI-Powered Resume Screener": img("photo-1497633762265-9d179a990aa6", 600, 400),
+        "Customer Churn Predictor": img("photo-1551288049-bebda4e38f71", 600, 400),
+        "Sales KPI Dashboard": img("photo-1553877522-43269d4ea984", 600, 400),
+        "Autonomous Research Agent": img("photo-1620712943543-bcc4688e7485", 600, 400),
+    }
+    TEAM_IMGS = {
+        "Rajesh Menon": img("photo-1560250097-0b93528c311a", 500, 500),
+        "Neha Iyer": img("photo-1580489944761-15a19d654956", 500, 500),
+        "Aman Gupta": img("photo-1519085360753-af0119f7cbe7", 500, 500),
+    }
+    TESTI_IMGS = {
+        "Priya Sharma": img("photo-1573496359142-b8d87734a5a2", 300, 300),
+        "Aditya Verma": img("photo-1544723795-3fb6469f5b39", 300, 300),
+        "Rhea Kapoor": img("photo-1494790108377-be9c29b29330", 300, 300),
+        "Karan Mehta": img("photo-1500648767791-00dcc994a43e", 300, 300),
+    }
+    HERO_IMG = img("photo-1522202176988-66273c2fd55f", 1200, 800)
+    BLOG_COVER = img("photo-1677442136019-21780ecad995", 1200, 630)
+
     # Courses
     if await db.courses.count_documents({}) == 0:
         docs = []
@@ -250,7 +284,7 @@ async def seed_all(db):
                 "slug": _slug(c["title"]),
                 "short_summary": c["short_summary"],
                 "long_description": c["long_description"],
-                "thumbnail": "",
+                "thumbnail": COURSE_IMGS.get(c["title"], ""),
                 "thumbnail_alt": c["title"],
                 "curriculum": c["curriculum"],
                 "tools": c["tools"],
@@ -280,9 +314,7 @@ async def seed_all(db):
                 "role": t["role"],
                 "company": t["company"],
                 "quote": t["quote"],
-                "photo": "",
-                "linkedin_url": "",
-                "rating": t["rating"],
+                "photo": TESTI_IMGS.get(t["name"], ""),
                 "order": t["order"],
                 "created_at": now,
                 "updated_at": now,
@@ -298,7 +330,7 @@ async def seed_all(db):
                 "name": m["name"],
                 "role": m["role"],
                 "bio": m["bio"],
-                "photo": "",
+                "photo": TEAM_IMGS.get(m["name"], ""),
                 "credentials": m["credentials"],
                 "linkedin_url": "",
                 "twitter_url": "",
@@ -319,7 +351,7 @@ async def seed_all(db):
                 "category": p["category"],
                 "description": p["description"],
                 "tech_tags": p["tech_tags"],
-                "thumbnail": "",
+                "thumbnail": PROJECT_IMGS.get(p["title"], ""),
                 "thumbnail_alt": p["title"],
                 "external_url": "",
                 "order": p["order"],
@@ -330,7 +362,7 @@ async def seed_all(db):
 
     # Homepage
     if await db.homepage.find_one({"id": "homepage"}) is None:
-        await db.homepage.insert_one({**HOMEPAGE, "id": "homepage", "hero_image": "", "updated_at": now})
+        await db.homepage.insert_one({**HOMEPAGE, "id": "homepage", "hero_image": HERO_IMG, "updated_at": now})
 
     # Settings
     if await db.settings.find_one({"id": "settings"}) is None:
@@ -362,7 +394,7 @@ async def seed_all(db):
             "slug": "why-2026-is-the-year-to-learn-agentic-ai",
             "excerpt": "Agentic AI is moving from labs to production. Here's what learners must focus on to stay ahead.",
             "content": "<h2>The rise of agents</h2><p>2026 marks a turning point for autonomous AI systems. From research copilots to full-stack coding agents, the shift from single-shot LLM calls to multi-step, tool-using agents is here.</p><h3>What to learn</h3><ul><li>Prompt engineering fundamentals</li><li>RAG pipelines & vector DBs</li><li>Agent orchestration with LangGraph</li><li>Evaluation & safety</li></ul><p>Our Generative & Agentic AI cohort covers every one of these. Book a demo to see the curriculum.</p>",
-            "cover_image": "",
+            "cover_image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&h=630&q=70",
             "cover_alt": "Agentic AI",
             "category": "AI",
             "tags": ["Agentic AI", "LLM", "RAG"],

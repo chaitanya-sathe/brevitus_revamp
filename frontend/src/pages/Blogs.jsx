@@ -18,8 +18,8 @@ export default function Blogs() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="blog-grid">
           {items.map((b) => (
             <Link key={b.id} to={`/blog/${b.slug}`} data-testid={`blog-card-${b.slug}`} className="group block rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition">
-              <div className="aspect-[16/9] bg-gradient-to-br from-purple-500 to-blue-800 flex items-center justify-center text-white font-heading text-xl">
-                {b.cover_image ? <img src={b.cover_image} alt={b.cover_alt || b.title} className="w-full h-full object-cover" /> : b.category}
+              <div className="aspect-[16/9] bg-gradient-to-br from-purple-500 to-blue-800 flex items-center justify-center text-white font-heading text-xl overflow-hidden">
+                {b.cover_image ? <img src={b.cover_image} alt={b.cover_alt || b.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /> : b.category}
               </div>
               <div className="p-6">
                 <div className="text-xs uppercase tracking-widest font-bold text-purple-700">{b.category}</div>
