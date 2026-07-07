@@ -155,7 +155,7 @@ export function useAdminList(endpoint) {
     }
     setLoading(false);
   }
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [endpoint]);
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [endpoint,load]);
   return { items, loading, reload: load, setItems };
 }
 
