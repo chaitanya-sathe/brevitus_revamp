@@ -52,7 +52,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs uppercase tracking-widest font-bold text-purple-700 shadow-sm">
-                <Sparkle size={14} weight="fill" /> New Batches • Feb–Mar 2026
+                <Sparkle size={14} weight="fill" /> New Batches Starting This Augest
               </div>
               <h1 data-testid="hero-heading" className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold mt-6 text-slate-900 leading-[1.02]">
                 {h.hero_heading || "Master AI, Data & Analytics"}<br />
