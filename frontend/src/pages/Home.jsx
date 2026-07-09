@@ -90,7 +90,7 @@ export default function Home() {
                   <div className="relative">
                     <div className="text-xs uppercase tracking-widest opacity-80">Featured</div>
                     <div className="font-heading text-xl font-bold mt-1">Agentic AI</div>
-                    <div className="text-sm opacity-90">5-month program</div>
+                    <div className="text-sm opacity-90">Job Oriented Program</div>
                   </div>
                 </div>
                 <div className="aspect-square rounded-2xl bg-white border border-slate-200 p-6 flex flex-col justify-between shadow-lg">
