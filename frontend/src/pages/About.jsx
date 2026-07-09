@@ -9,9 +9,7 @@ export default function About() {
         <div className="text-xs uppercase tracking-widest font-bold text-purple-700">About Brevitus</div>
         <h1 className="font-heading text-5xl md:text-6xl font-bold text-slate-900 mt-3">Education that ships careers.</h1>
         <p className="mt-6 text-lg text-slate-600 leading-relaxed">
-          Brevitus Technology exists to make world-class AI, Data & Analytics education radically accessible.
-          We combine curriculum designed by working practitioners, live 1:1 mentorship, and a placement network that
-          gets our learners hired at companies they'll be proud of.
+         Brevitus Technology is a leading technology, training, and career development company specializing in Data Science, Artificial Intelligence (AI), Machine Learning, Deep Learning, Generative AI, Agentic AI, Data Analytics, Business Analytics, Python Programming, SQL, Power BI, and Tableau. In addition to industry-focused training and IT placement assistance, we provide professional website development, web application development, mobile app development, AI solutions, data analytics solutions, and custom software development services. Through hands-on learning, real-world projects, mentorship, career guidance, resume building, interview preparation, and technology consulting, we help students, professionals, startups, and businesses accelerate growth, innovation, and digital transformation.
         </p>
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
