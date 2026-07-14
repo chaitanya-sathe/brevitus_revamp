@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import PublicLayout from "@/components/PublicLayout";
 import AdminLayout from "@/components/AdminLayout";
+import { Analytics } from "@vercel/analytics/react";
 
 import Home from "@/pages/Home";
 import Courses from "@/pages/Courses";
@@ -81,8 +82,10 @@ export default function App() {
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <Analytics />
         </BrowserRouter>
       </AuthProvider>
     </HelmetProvider>
   );
 }
+
